@@ -1,0 +1,355 @@
+.navbar {
+    background-color: white;
+}
+html {
+    overflow-x: hidden;
+    min-width: 725px;
+}
+.containerLogoSignIn{
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    justify-content: space-between;
+}
+.containerSignIn{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+@media only screen and (max-width: 730px) {
+    .brand-logo{
+        display: none;
+    }
+    html{
+        overflow-x:scroll;
+    }
+    .footer-container{
+        flex-direction: column;
+    }
+}
+.signInExitBtn{
+    background-color: inherit;
+    outline: none;
+    border: none;
+    margin-right: 12px;
+}
+
+.signIn{
+    outline: none;
+    border: none;
+    background-color: white;
+}
+.logInContainer{
+    display: flex;
+    flex-direction: row;
+    margin: 14px 0;
+}
+.logInContainer>div{
+    margin-right: 6px;
+}
+.logInContainer>div>input{
+    border-radius: 10px;
+    border-width: thin;
+    outline: none;
+}
+.logInContainer>div>button:hover{
+    color: red;
+}
+.bodyimage {
+    margin-right: 6px;
+    width: 100%;
+    height: auto;
+    z-index: 10;
+    top: 0;
+    left: 0;
+}
+
+.searchImage {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.search {
+    margin: 3% 42% 0 33%;
+    width: 35%;
+    position: relative;
+    opacity: 0.94;
+}
+
+.search input {
+    border: none;
+}
+
+.search .input {
+    width: 100%;
+    padding: 8px 37px 9px 15px;
+    -moz-box-sizing: border-box;
+    border-radius: 20px;
+    background: #ffffff;
+    font: 13px Tahoma, Arial, sans-serif;
+    color: #555;
+    outline: none;
+}
+
+.search .submit {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 37px;
+    height: 100%;
+    cursor: pointer;
+    outline: none;
+    background: url(https://lh4.googleusercontent.com/-b-5aBxcxarY/UAfFW9lVyjI/AAAAAAAABUg/gQtEXuPuIds/s13/go.png) 50% no-repeat;
+    opacity: 0.5;
+}
+
+input[type="search"] {
+    -webkit-appearance: none;
+}
+
+.search .input:focus {
+
+}
+
+.headArticles{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.headSorting{
+    margin: 25px 10px 0 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+.typeSorting>button{
+    margin: 5px 5px;
+    background-color: white;
+    border-width: thin;
+    width: auto;
+    text-align: end;
+    border-radius: 30px;
+    outline: none;
+}
+
+.typeSorting>button>img{
+    margin: 0 14px 3px 0;
+}
+.typeSorting>button:hover{
+    color: green;
+}
+.filter{
+    border: none;
+    background-color: #ffffff;
+    height: fit-content;
+}
+.filter:focus,
+.filter:active,
+.signInBtn:focus,
+.signInBtn:active{
+    outline: none;
+}
+.imageContainer {
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+.containerButton {
+    display: flex;
+    justify-content: center;
+}
+
+.containerButton > button {
+    font-size: 20px;
+    margin: 7px 8px 5px 13px;
+    outline: white;
+    border: none;
+    background-color: inherit;
+}
+.newArticleform {
+    display: flex;
+    flex-direction: column;
+    margin: 0 20% 3% 20%;
+    background-color: #ffffff;
+    border-radius: 3px;
+}
+.FullInfoAboutAuthor{
+    display: flex;
+    flex-direction: column;
+    margin: 0 20% 3% 20%;
+    background-color: #ffffff;
+    border-radius: 3px;
+}
+.FullInfoAboutAuthor>div>label{
+    margin: 10px;
+}
+.footer-container {
+    background-color: #ffffff;
+    margin: 0 10% 0 10%;
+    display: flex;
+    justify-content: center;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+
+.footer-container > span {
+    font-family: unset;
+    margin: 14px;
+}
+
+.containerArticles {
+    margin: auto;
+    background-color: #ffffff;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    max-width: 695px;
+
+}
+
+.articlesList {
+    display: flex;
+    flex-direction: column;
+    margin: 15px;
+    max-width: 690px;
+    border: outset;
+    border-color: black;
+    border-width: 1px;
+}
+.likesDislikes>button{
+    border: none;
+    outline: none;
+    background-color: white;
+}
+.articleDateViews{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.articleDateViews>div{
+    font-size: 13px;
+    margin: 7px 0 3px 0;
+}
+
+.containerFullInfoArticle{
+    margin: auto;
+    background-color: #ffffff;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    max-width: 950px;
+}
+.fullInfoArticle{
+    display: flex;
+    flex-direction: column;
+    margin: 22px;
+}
+.fullInfoArticleFooter{
+    display: flex;
+    flex-direction: row;
+    margin-top: 18px;
+}
+.fullInfoArticleFooter>div{
+    margin-right: 6px;
+}
+.article{
+    display: flex;
+    flex-wrap: nowrap;
+    background-color: white;
+}
+.article>div{
+    width: 50%;
+    margin:5px
+}
+.article-image{
+    border-radius: 5px;
+}
+.article-info{
+    white-space: pre-wrap;
+    display: flex;
+    flex-direction: column;
+    border: #ff0000;
+}
+.article-info> div{
+}
+hr{
+    width: 100%;
+    margin: 0;
+}
+.readMore{
+    border: none;
+    background-color: white;
+    outline: none;
+}
+.readMore:hover{
+    color:red;
+    cursor: pointer;
+}
+.readMore:focus,
+.readMore:active{
+    outline: none;
+}
+.containerNextPred10Articles{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.containerNextPred10Articles>button{
+    padding: 0 20px 14px 20px;
+    border: none;
+    outline: none;
+    background-color: inherit;
+}
+.containerNextPred10Articles>button:hover{
+    color: red;
+}
+.containerComments{
+    background-color: #ffffff;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    max-width: 950px;
+}
+.commentsOpen{
+    max-width: 950px;
+    border: none;
+    background: white;
+    padding: 10px;
+    outline: none;
+    margin-top: 10px;
+}
+.commentsOpen:hover{
+    color: red;
+}
+.comments{
+    display: flex;
+    flex-direction: column;
+}
+.comment{
+    display: flex;
+    flex-direction: column;
+    margin: 18px;
+    border-style: solid;
+    border-width: thin;
+    padding: 6px;
+    border-radius: 7px;
+}
+.comment>div{
+    margin: 3px;
+}
+.comment-author-date{
+    display: flex;
+    flex-direction: row;
+}
+.comment-author-date>div{
+    margin: 2px 4px 3px 0;
+
+}
+.saveComment:hover{
+    color: red;
+}

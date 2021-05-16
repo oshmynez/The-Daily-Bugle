@@ -1,0 +1,366 @@
+<!Doctype html>
+<html lang="en" xmlns:https="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=800px, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="/main.css">
+    <title>The Daily Bugle</title>
+    <style>
+        body {
+            margin: unset;
+            background-color: #f9fafa;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div id="authorization" class="containerLogoSignIn" style="height: 59px">
+        <span class="brand-logo"
+              style="margin-left: 3%; font-size: xxx-large; width: fit-content; font-family: sans-serif">The Daily Bugle</span>
+    <div class="containerSignIn m-6">
+        <div style="margin: auto">
+            {{statusAuth}}
+        </div>
+        <div v-if="openSigInAndLogin">
+            <form class="logInContainer" @submit.prevent="userAuthorization">
+                <div style="margin-left: 10px">
+                    <label for="email"></label>
+                    <input id="email" type="email" placeholder="email" required v-model="form.email"
+                           v-on:input="emailChange($event)"/>
+                </div>
+                <div>
+                    <label for="password"></label>
+                    <input id="password" type="password" autocomplete="off" placeholder="password" required
+                           v-model="form.pass"/>
+                </div>
+                <div>
+                    <button style="outline: none" class="signIn" type="submit" @click="this.signInOrLogIn = 1"
+                            :disabled="authButtons">SignIn
+                    </button>
+                </div>
+                <div>
+                    <button style="outline: none" class="signIn" type="submit" @click="this.signInOrLogIn = 2"
+                            :disabled="authButtons">SignUp
+                    </button>
+                </div>
+            </form>
+        </div>
+        <button style="outline: none" class="signInExitBtn" @click="openPanelAuthorization">
+            <img src="/user.png" alt="">
+        </button>
+        <button style="outline: none" class="signInExitBtn" @click="exitFromSystem">
+            <img src="/exit.png" alt="">
+        </button>
+        <span v-if="successfulAuthorization">
+
+        </span>
+    </div>
+</div><!--Authorization and registration-->
+
+<div id="app" v-cloak>
+    <div class="imageContainer">
+        <div class="searchImage">
+            <form class="search" @submit.prevent="searchArticle">
+                <label for="searchMessage"></label>
+                <input class="input" id="searchMessage" v-model="searchText" type="text" placeholder="Search..."/>
+                <input class="submit" value=" " type="submit"/>
+            </form>
+        </div>
+        <div><img class="bodyimage"
+                  src="https://lookw.ru/8/809/1476139769-wallpaper-new-york-bay-met-dvdbash-wordpress.jpg"
+                  width="1920" height="200" alt=""></div>
+    </div>
+
+    <div class="containerButton">
+        <button :style="{color: currentPageFlag === 1? 'red':'black'}" @click="checkAccessToCreateArticle">
+            Create
+        </button>
+        <button :style="{color: currentPageFlag === 2? 'red':'black'}" @click="getFirstTenArticles">
+            Top-10
+        </button>
+        <button v-if="articleFullInfo.length !== 0" :style="{color: currentPageFlag === 3? 'red':'black'}"
+                @click="getFullInfoAboutArticle">
+            {{articleFullInfo[0].title}}
+        </button>
+        <button v-if="aboutAuthor" :style="{color: currentPageFlag === 4? 'red':'black'}" @click="currentPageFlag = 4">
+            About Author
+        </button>
+    </div>
+
+    <div v-if="currentPageFlag === 1"><!--create Article-->
+        <div>
+            <form class="newArticleform" @submit.prevent="createArticle" enctype="multipart/form-data">
+                <h2 style="font-family: unset;margin: 20px 0 20px 16px">Write your article here</h2>
+                <label style="margin: 0 0 9px 16px">Topic</label>
+                <label>
+                    <select style="color: #6c757d; border-color:#ced4da;border-radius: 4px;height: 36px; margin:0 0 10px 15px; outline: none"
+                            v-model="form.topic"
+                            required>
+                        <option style="text-align: center" value="" selected disabled>Topic</option>
+                        <option>Политика</option>
+                        <option>Культура и Искусство</option>
+                        <option>Общество</option>
+                        <option>Наука</option>
+                        <option>Здоровье</option>
+                        <option>Финансы</option>
+                        <option>Авто</option>
+                        <option>Города</option>
+                    </select>
+                </label>
+                <div class="form-group ml-3 mr-3">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" required v-model="form.title"
+                           placeholder="Title">
+                </div>
+                <div class="ml-3 mr-3">
+                    <label style="width: 100%" for="description">Article Text</label>
+                    <textarea id="description" class="form-control" name="message" required
+                              placeholder="Article description"
+                              style="resize:vertical; width: 100%; min-height: 200px" v-model="form.description">
+                    </textarea>
+                </div>
+                <div class="ml-3 mt-3 mr-3">
+                    <input type="file" name="file" accept=".jpeg" @change="handleFileUpload"/>
+                </div>
+
+                <button v-if="getAccessToCreateArticle" style="margin:25px 20px" class="btn btn-primary" type="submit">
+                    Create
+                </button>
+                <button v-else style="margin:25px 20px; cursor: unset; color: red" disabled class="btn btn-primary"
+                        type="submit">authorize to create an article
+                </button>
+                <div style="margin-left: 21px;" v-if="statusOfCreatedArticle === 1">
+                    Статья успешна сохранена
+                </div>
+                <div style="margin-left: 21px;" v-else-if="statusOfCreatedArticle === 0">
+                    Статья не сохранена
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="containerArticles" v-else-if="currentPageFlag === 2">
+
+        <div class="headArticles">
+            <h2 style="font-family: unset;margin: 20px 0 20px 16px">All Articles</h2>
+            <div class="headSorting">
+                <div class="typeSorting" v-if="sortFlag">
+                    <label>
+                        <select @change="onChangeTopicSort($event)"
+                                style="color: black; border-color:black;border-radius: 35px;height: 30px; margin:0 10px 10px 15px; outline: none">
+                            <option style="text-align: center" value="" selected disabled>Topic</option>
+                            <option>Все</option>
+                            <option>Политика</option>
+                            <option>Культура и Искусство</option>
+                            <option>Общество</option>
+                            <option>Наука</option>
+                            <option>Здоровье</option>
+                            <option>Финансы</option>
+                            <option>Авто</option>
+                            <option>Города</option>
+                        </select>
+                    </label>
+                    <button style="text-align: revert" @click="sortArticles" :disabled="canSort">Sort</button>
+                </div>
+                <button class="filter" @click="sortPanel">
+                    <img src="/filter.ico" alt="">
+                </button>
+            </div>
+        </div>
+
+        <div v-if="loading">
+            <loader/>
+        </div>
+        <div class="articlesList" v-for="article in articles">
+            <div class="article">
+                <div class="article-image"><img width="316" height="300" v-bind:src="article.file" alt=""></div>
+                <div class="article-info">
+                    <input type="hidden" value="{{article._id}}">
+
+                    <div class="" style="font-size: 25px">{{article.title}}</div>
+                    <hr>
+                    <div style="margin: 5px 0 3px 2px">
+                        {{article.description.slice(0, 350)}}...
+                        <button class="readMore" @click="openArticle(article._id)">read more</button>
+                    </div>
+                    <hr>
+                    <div class="articleDateViews">
+                        <div>
+                            <button disabled="disabled"
+                                    style="padding:0; color: black; outline: none ; background-color: white; border: none;">
+                                <img class="pr-1 pb-1" src="/calendar.png" alt="">{{article.date}}
+                            </button>
+                        </div>
+                        <div>
+                            <button disabled="disabled"
+                                    style="padding:0; color: black; outline: none ; background-color: white; border: none;">
+                                <img class="pr-1 pb-1" src="/like_black.png" alt="">{{article.likes}}
+                            </button>
+                        </div>
+                        <div>
+                            <button disabled="disabled"
+                                    style="padding:0;color: black; outline: none ; background-color: white; border: none;">
+                                <img class="pr-1 pb-1" src="/dislike_black.png" alt="">{{article.dislikes}}
+                            </button>
+                        </div>
+                        <div>
+                            <button disabled="disabled"
+                                    style="padding:0; color: black; outline: none ; background-color: white; border: none;">
+                                <img class="pr-1" src="/eyeviews.png" alt="">{{article.views}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin:auto" v-if="filteredArticlesExist">
+            Нет статей согласно фильтру
+        </div>
+
+        <div class="containerNextPred10Articles" v-if="!loading">
+            <button @click="getTenPrevNextArticles(1)" :disabled="btnGetTenPrevArticlesDisabled">
+                <img @mouseover="mouseOver(1)" @mouseleave="this.leftArrow = '/leftArrow.png'" v-bind:src="leftArrow"
+                     alt="">
+            </button>
+            <button @click="getTenPrevNextArticles(2)" :disabled="btnGetTenNextArticlesDisabled">
+                <img @mouseover="mouseOver(2)" @mouseleave="this.rightArrow = '/rightArrow.png'" v-bind:src="rightArrow"
+                     alt="">
+            </button>
+        </div>
+    </div><!-- Top-10 articles-->
+
+    <div v-if="currentPageFlag === 3 && articleFullInfo.length !== 0">
+        <div class="containerFullInfoArticle">
+            <div class="fullInfoArticle">
+                <div style="font-size: 30px; font-family: unset; margin-bottom: 18px">
+                    {{articleFullInfo[0].title}}
+                </div>
+                <hr>
+                <div style="text-align: justify; text-indent: 40px; margin: 15px 0;">
+                    {{articleFullInfo[0].description}}
+                </div>
+                <hr>
+                <div class="fullInfoArticleFooter">
+                    <div>
+                        <button disabled="disabled"
+                                style="color: black; outline: none ; background-color: white; border: none;">
+                            <img class="pr-1" src="/calendar.png" alt="">{{articleFullInfo[0].date}}
+                        </button>
+                    </div>
+                    <div class="likesDislikes">
+                        <button @click="dislikeLikeChange(articleFullInfo[0]._id, 0, articleFullInfo[0].author)"
+                                :disabled="dislikeDisabled">
+                            <img v-bind:src="dislike" alt="">{{articleFullInfo[0].dislikes}}
+                        </button>
+                        <button @click="dislikeLikeChange(articleFullInfo[0]._id, 1, articleFullInfo[0].author)"
+                                :disabled="likeDisabled">
+                            <img v-bind:src="like" alt="">{{articleFullInfo[0].likes}}
+                        </button>
+                    </div>
+                    <div>
+                        <button disabled="disabled"
+                                style="color: black; outline: none ; background-color: white; border: none;">
+                            <img class="pr-1" src="/eyeviews.png" alt="">{{articleFullInfo[0].views}}
+                        </button>
+                    </div>
+                    <div>
+                        <button @click="openInfoAboutAuthor(articleFullInfo[0].author)"
+                                style="color: black; outline: none ; background-color: white; border: none;">
+                            <img class="pr-1" src="/author.png" alt="">{{articleFullInfo[0].author}}
+                        </button>
+                    </div>
+
+                    <div>
+                        <button disabled="disabled"
+                                style="color: black; outline: none ; background-color: white; border: none;">
+                            <img class="pr-1" src="/comment.png" alt="">{{articleFullInfo[0].comments.length}}
+                        </button>
+                    </div>
+                </div>
+                <!--comments-->
+                <div class="containerComments">
+                    <button :style="{backgroundColor: openCloseComments === 'Скрыть комментарии'? '#f9fafa':'#ffffff'}"
+                            style="outline: none" class="commentsOpen" @click="openComments(articleFullInfo[0]._id)">{{openCloseComments}}
+                    </button>
+                    <div class="comments" v-if="openCloseComments === 'Скрыть комментарии'">
+
+                        <div class="comment" v-for="comment in articleFullInfo[0].comments">
+                            <div class="comment-author-date">
+                                <div>{{comment.author}}</div>
+                                <div>{{comment.currentDateTime}}</div>
+                            </div>
+                            <hr>
+                            <div style="background-color:rgb(251 251 251)">
+                                {{comment.comment}}
+                            </div>
+                        </div>
+                        <hr style="background-color: #8bafaf;">
+                        <form style="display: flex; flex-direction: column" @submit.prevent="saveComment">
+                        <textarea style="margin: 10px 0 5px 0;outline: none;resize: vertical; min-height: 100px"
+                                  v-model="comment" placeholder="Comment..." required>
+                        </textarea>
+                            <button class="saveComment" style="border: none; height: 38px; outline: none" type="submit"
+                                    :disabled="saveCommentDisabled">Save Comment
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="margin: auto;width: fit-content;font-size: xx-large;" v-else>{{resultSearching}}</div>
+
+    <div v-if="currentPageFlag === 4">
+        <div class="FullInfoAboutAuthor">
+            <h3 style="font-family: unset;margin: 20px 0 20px 16px">{{author[0].email}}</h3>
+            <div>
+                <label style="margin: 0 0 9px 16px">Email: </label>
+                <label>{{author[0].email}}</label>
+            </div>
+            <div>
+                <label style="margin: 0 0 9px 16px">Number Articles: </label>
+                <label>{{author[0].numberArticlesWritten}}</label>
+            </div>
+            <div>
+                <label style="margin: 0 0 9px 16px">Likes: </label>
+                <label style="color: green">{{author[0].likes}}</label>
+            </div>
+            <div>
+                <label style="margin: 0 0 9px 16px">Dislikes: </label>
+                <label style="color: red">{{author[0].dislikes}}</label>
+            </div>
+            <div>
+                <label style="margin: 0 0 9px 16px">Date of Registration: </label>
+                <label>{{author[0].dateOfRegistration}}</label>
+            </div>
+        </div>
+    </div>
+
+</div> <!--displaying articles-->
+
+<hr class="mt-5">
+
+<div class="footer-container">
+    <span>Формаго Д. М.  </span>
+    <span>email: dimaformago281@gmail.com</span>
+    <span>phone: +375297858263</span>
+    <span>&copy; Copyright 2021, BSUIR</span>
+</div>
+<script src="https://unpkg.com/vue@next"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+<script type="module" src="frontend.js"></script>
+<script type="module" src="authorization.js"></script>
+</body>
+</html>
